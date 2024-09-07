@@ -5,8 +5,12 @@ import sys
 from dateutil.parser import parse
 from dateutil.tz import tzutc
 import json
+import getpass
 
 BASE_URL = "https://api.tailscale.com/api/v2"
+
+def get_api_key():
+    return getpass.getpass("Enter your Tailscale API key: ")
 
 def get_devices(api_key):
     headers = {"Authorization": f"Bearer {api_key}"}
@@ -164,7 +168,6 @@ def find_devices(api_key, search_term):
 
 def main():
     parser = argparse.ArgumentParser(description="Tailscale Device Manager")
-    parser.add_argument("--api-key", required=True, help="Tailscale API key")
     parser.add_argument("--remove-old", type=int, metavar="DAYS", help="Remove devices older than specified number of days")
     parser.add_argument("--list", action="store_true", help="List all devices")
     parser.add_argument("--remove", help="Remove a specific device by ID")
@@ -175,21 +178,23 @@ def main():
 
     args = parser.parse_args()
 
+    api_key = get_api_key()
+
     try:
         if args.remove_old is not None:
-            remove_old_devices(args.api_key, args.remove_old)
+            remove_old_devices(api_key, args.remove_old)
         elif args.list:
-            list_devices(args.api_key)
+            list_devices(api_key)
         elif args.remove:
-            remove_device(args.api_key, args.remove)
+            remove_device(api_key, args.remove)
         elif args.list_tags:
-            list_tags(args.api_key, args.list_tags)
+            list_tags(api_key, args.list_tags)
         elif args.add_tags:
-            add_tags(args.api_key, args.add_tags[0], args.add_tags[1])
+            add_tags(api_key, args.add_tags[0], args.add_tags[1])
         elif args.remove_tags:
-            remove_tags(args.api_key, args.remove_tags[0], args.remove_tags[1])
+            remove_tags(api_key, args.remove_tags[0], args.remove_tags[1])
         elif args.find_device:
-            find_devices(args.api_key, args.find_device)
+            find_devices(api_key, args.find_device)
         else:
             print("Please specify an action: --remove-old DAYS, --list, --remove DEVICE_ID, --list-tags DEVICE_ID, --add-tags DEVICE_ID TAGS, --remove-tags DEVICE_ID TAGS, or --find-device SEARCH_TERM")
     except requests.exceptions.RequestException as e:
