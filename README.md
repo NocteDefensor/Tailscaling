@@ -38,14 +38,14 @@ Tailscale Device Manager is a command-line tool for managing devices in your Tai
 
 ## Usage
 
-The script requires a Tailscale API key for authentication. You can pass this key using the `--api-key` option.
+The script will prompt you for your Tailscale API key when you run any command. This ensures that your API key is not stored in your command line history.
 
 ### List all devices
 
 To list all devices in your Tailscale network:
 
 ```
-python3 device-manager.py --api-key YOUR_API_KEY --list
+python3 tailscale_admin.py --list
 ```
 
 ### Remove old devices
@@ -53,7 +53,7 @@ python3 device-manager.py --api-key YOUR_API_KEY --list
 To remove devices that haven't been seen for a specified number of days:
 
 ```
-python3 device-manager.py --api-key YOUR_API_KEY --remove-old DAYS
+python3 tailscale_admin.py --remove-old DAYS
 ```
 
 Replace `DAYS` with the number of days of inactivity after which a device should be removed.
@@ -63,7 +63,7 @@ Replace `DAYS` with the number of days of inactivity after which a device should
 To remove a specific device by its ID:
 
 ```
-python3 device-manager.py --api-key YOUR_API_KEY --remove DEVICE_ID
+python3 tailscale_admin.py --remove DEVICE_ID
 ```
 
 Replace `DEVICE_ID` with the ID of the device you want to remove.
@@ -73,7 +73,7 @@ Replace `DEVICE_ID` with the ID of the device you want to remove.
 To list tags for a specific device:
 
 ```
-python3 device-manager.py --api-key YOUR_API_KEY --list-tags DEVICE_ID
+python3 tailscale_admin.py --list-tags DEVICE_ID
 ```
 
 Replace `DEVICE_ID` with the ID of the device you want to list tags for.
@@ -83,7 +83,7 @@ Replace `DEVICE_ID` with the ID of the device you want to list tags for.
 To add tags to a specific device:
 
 ```
-python3 device-manager.py --api-key YOUR_API_KEY --add-tags DEVICE_ID "tag1,tag2,tag3"
+python3 tailscale_admin.py --add-tags DEVICE_ID "tag1,tag2,tag3"
 ```
 
 Replace `DEVICE_ID` with the ID of the device you want to add tags to, and provide a comma-separated list of tags.
@@ -93,7 +93,7 @@ Replace `DEVICE_ID` with the ID of the device you want to add tags to, and provi
 To remove tags from a specific device:
 
 ```
-python3 device-manager.py --api-key YOUR_API_KEY --remove-tags DEVICE_ID "tag1,tag2,tag3"
+python3 tailscale_admin.py --remove-tags DEVICE_ID "tag1,tag2,tag3"
 ```
 
 Replace `DEVICE_ID` with the ID of the device you want to remove tags from, and provide a comma-separated list of tags to remove.
@@ -103,7 +103,7 @@ Replace `DEVICE_ID` with the ID of the device you want to remove tags from, and 
 To find devices by partial hostname match:
 
 ```
-python3 device-manager.py --api-key YOUR_API_KEY --find-device SEARCH_TERM
+python3 tailscale_admin.py --find-device SEARCH_TERM
 ```
 
 Replace `SEARCH_TERM` with the partial hostname you want to search for.
@@ -112,43 +112,46 @@ Replace `SEARCH_TERM` with the partial hostname you want to search for.
 
 1. List all devices:
    ```
-   python3 device-manager.py --api-key abcdef1234567890 --list
+   python3 tailscale_admin.py --list
    ```
 
 2. Remove devices not seen in the last 60 days:
    ```
-   python3 device-manager.py --api-key abcdef1234567890 --remove-old 60
+   python3 tailscale_admin.py --remove-old 60
    ```
 
 3. Remove a specific device:
    ```
-   python3 device-manager.py --api-key abcdef1234567890 --remove tsdev-1234567890abcdef
+   python3 tailscale_admin.py --remove tsdev-1234567890abcdef
    ```
 
 4. List tags for a device:
    ```
-   python3 device-manager.py --api-key abcdef1234567890 --list-tags tsdev-1234567890abcdef
+   python3 tailscale_admin.py --list-tags tsdev-1234567890abcdef
    ```
 
 5. Add tags to a device:
    ```
-   python3 device-manager.py --api-key abcdef1234567890 --add-tags tsdev-1234567890abcdef "tag1,tag2"
+   python3 tailscale_admin.py --add-tags tsdev-1234567890abcdef "tag1,tag2"
    ```
 
 6. Remove tags from a device:
    ```
-   python3 device-manager.py --api-key abcdef1234567890 --remove-tags tsdev-1234567890abcdef "tag1,tag2"
+   python3 tailscale_admin.py --remove-tags tsdev-1234567890abcdef "tag1,tag2"
    ```
 
 7. Find devices with "laptop" in the hostname:
    ```
-   python3 device-manager.py --api-key abcdef1234567890 --find-device laptop
+   python3 tailscale_admin.py --find-device laptop
    ```
+
+For each command, you will be prompted to enter your Tailscale API key securely.
 
 ## Security Note
 
-This script requires a Tailscale API key with permissions to read device information, remove devices, and manage tags. Handle this key securely and avoid sharing it or committing it to version control.
+This script requires a Tailscale API key with permissions to read device information, remove devices, and manage tags. The API key is input securely at runtime and is not stored or logged. However, always ensure you're using the script in a secure environment.
 
 ## Contributing
 
 Contributions are welcome! Please feel free to submit a Pull Request.
+
